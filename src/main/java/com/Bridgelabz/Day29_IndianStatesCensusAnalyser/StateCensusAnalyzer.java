@@ -14,8 +14,8 @@ import com.opencsv.bean.CsvToBeanBuilder;
 public class StateCensusAnalyzer {
 
 	
-	public int readCSVData(String FilePath) throws StateAnalyzerException {
-		
+	public int readStateCensusCSVData(String FilePath) throws StateAnalyzerException {
+
 		
 		try {
 			Files.newBufferedReader(Paths.get(FilePath));
@@ -30,8 +30,7 @@ public class StateCensusAnalyzer {
 			int count = (int) StreamSupport.stream(csvItrable.spliterator(), false).count();
 
 			BufferedReader br = new BufferedReader(reader);
-			
-			
+
 			while (br.readLine() != null) {
 				String[] head = br.readLine().split(",");
 				boolean flagCorrectHead = head[0] == "State" && head[1] == "Population" && head[2] == "AreaInSqKm"
@@ -56,9 +55,28 @@ public class StateCensusAnalyzer {
 			return count;
 
 		} catch (IOException exception) {
-			throw new StateAnalyzerException("Inavlid Path Name", ExceptionType.INVALID_FILE_PATH);
+			throw new StateAnalyzerException("Invalid Path Name", ExceptionType.INVALID_FILE_PATH);
 		} catch (IllegalStateException exception) {
 			throw new StateAnalyzerException("Invalid Class Type.", ExceptionType.INVALID_CLASS_TYPE);
+		}
+	}
+
+	
+	public int readStateCodeCSVData(String FilePath) throws StateAnalyzerException {
+
+		try {
+			Files.newBufferedReader(Paths.get(FilePath));
+			Reader reader = Files.newBufferedReader(Paths.get(FilePath));
+			CsvToBean<CSVStates> csvToBean = new CsvToBeanBuilder<CSVStates>(reader).withIgnoreLeadingWhiteSpace(true)
+					.withSkipLines(1).withType(CSVStates.class).build();
+
+			Iterator<CSVStates> csvIterator = csvToBean.iterator();
+
+			Iterable<CSVStates> csvItrable = () -> csvIterator;
+			int count = (int) StreamSupport.stream(csvItrable.spliterator(), false).count();
+			return count;
+		} catch (IOException exception) {
+			throw new StateAnalyzerException("Invalid Path Name", ExceptionType.INVALID_FILE_PATH);
 		}
 	}
 }

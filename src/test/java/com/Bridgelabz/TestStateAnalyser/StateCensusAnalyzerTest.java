@@ -1,13 +1,16 @@
 package com.Bridgelabz.TestStateAnalyser;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+
+import java.rmi.ServerException;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.Bridgelabz.Day29_IndianStatesCensusAnalyser.StateAnalyzerException;
 import com.Bridgelabz.Day29_IndianStatesCensusAnalyser.StateCensusAnalyzer;
+
+import moodAnalyserDay21.MoodAnalyser;
 
 public class StateCensusAnalyzerTest {
 
@@ -18,6 +21,7 @@ public class StateCensusAnalyzerTest {
 	
 	
 	private final String STATECODE_CSV_PATH="C:\\Users\\RAMDAS\\Desktop\'CSV\'IndianStateCode.csv";
+	private final String INVALID_STATECODE_CSV_PATH="IndiaStateCode.csv";
 	private StateCensusAnalyzer analyser;
 
 	
@@ -27,10 +31,8 @@ public class StateCensusAnalyzerTest {
 	}
 
 	
-		@Test
-		
 		public void givenCensusCSVFileReturnsCorrectNoOfEntries() throws StateAnalyzerException {
-			int stateCount = analyser.readCSVData(CENSUS_CSV_PATH);
+			int stateCount = analyser.readStateCensusCSVData(CENSUS_CSV_PATH);
 			assertEquals(28, stateCount);
 		}
 
@@ -38,7 +40,7 @@ public class StateCensusAnalyzerTest {
 	
 	public void givenIncorrectCSVFilePath_ThrowsCustomExceptionInvalidFilePath(){
 		try {
-			analyser.readCSVData(INVALID_CENSUS_CSV_PATH);
+			analyser.readStateCensusCSVData(INVALID_CENSUS_CSV_PATH);
 		} catch (StateAnalyzerException e) {
 			e.printStackTrace();
 			assertEquals(StateAnalyzerException.ExceptionType.INVALID_FILE_PATH, e.type);
@@ -49,7 +51,7 @@ public class StateCensusAnalyzerTest {
 	
 	public void givenIncorrectDelimiter_ThrowsCustomExceptionInvalidDelimiter(){
 		try {
-			analyser.readCSVData(INVALID_CENSUS_CSV_DELIM);
+			analyser.readStateCensusCSVData(INVALID_CENSUS_CSV_DELIM);
 		} catch (StateAnalyzerException e) {
 			e.printStackTrace();
 			assertEquals(StateAnalyzerException.ExceptionType.INVALID_DELIM, e.type);
@@ -60,18 +62,27 @@ public class StateCensusAnalyzerTest {
 	
 	public void givenIncorrectHeader_ThrowsCustomExceptionInvalidHeader(){
 		try {
-			analyser.readCSVData(INVALID_CENSUS_CSV_HEAD);
-		} catch (StateAnalyzerException e) {
+			MoodAnalyser.readStateCensusCSVData(INVALID_CENSUS_CSV_HEAD);
+		} catch (com.Bridgelabz.Day29_IndianStatesCensusAnalyser.StateAnalyzerException e) {
 			e.printStackTrace();
-			assertEquals(StateAnalyzerException.ExceptionType.INVALID_HEAD, e.type);
+			assertEquals(ServerException.ExceptionType.INVALID_HEAD, e.type);
 		}
 	}
 	
 	
-		@Test
-		
 		public void givenCodeCSVFileReturnsCorrectNoOfEntries() throws StateAnalyzerException{
-			int stateCount = analyser.readCSVData(STATECODE_CSV_PATH);
+			int stateCount = analyser.readStateCodeCSVData(STATECODE_CSV_PATH);
 			assertEquals(36, stateCount);
+		}
+		
+		@Test
+	
+		public void givenIncorrectCSVFilePath_ThrowsCustomExceptionInvalidFilePath2(){
+			try {
+				analyser.readStateCodeCSVData(INVALID_STATECODE_CSV_PATH);
+			} catch (StateAnalyzerException e) {
+				e.printStackTrace();
+				assertEquals(StateAnalyzerException.ExceptionType.INVALID_FILE_PATH, e.type);
+			}
 		}
 }
