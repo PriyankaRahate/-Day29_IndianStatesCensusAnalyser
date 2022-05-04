@@ -14,9 +14,10 @@ public class StateCensusAnalyzerTest {
 
 	private final String CENSUS_CSV_PATH = "C:\\Users\\RAMDAS\\Desktop.csv";
 	private final String INAVLID_CENSUS_CSV_PATH = "IndiaStateCensusData.csv";
+	private final String INVALID_CENSUS_CSV_DELIM="C:\\Users\\RAMDAS\\Desktop.csv";
 	private StateCensusAnalyzer analyser;
 
-	
+
 	@Before
 	public void init() {
 		analyser = new StateCensusAnalyzer();
@@ -26,7 +27,7 @@ public class StateCensusAnalyzerTest {
 	
 	public void givenCensusCSVFile_ReturnsCorrectNoOfEntries() throws IOException {
 		int stateCount = analyser.readCSVData();
-		assertEquals(29, stateCount);
+		assertEquals(28, stateCount);
 	}
 
 	@Test
@@ -37,6 +38,17 @@ public class StateCensusAnalyzerTest {
 		} catch (StateAnalyzerException e) {
 			e.printStackTrace();
 			assertEquals(StateAnalyzerException.ExceptionType.INVALID_FILE_PATH, e.type);
+		}
+	}
+	
+	@Test
+	
+	public void givenIncorrectDelimiter_ThrowsCustomExceptionInvalidDelimiter(){
+		try {
+			analyser.readCSVData(INVALID_CENSUS_CSV_DELIM);
+		} catch (StateAnalyzerException e) {
+			e.printStackTrace();
+			assertEquals(StateAnalyzerException.ExceptionType.INVALID_DELIM, e.type);
 		}
 	}
 }
