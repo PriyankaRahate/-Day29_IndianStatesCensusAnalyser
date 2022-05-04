@@ -1,4 +1,4 @@
-package com.Brodgelabz.Day29_IndianStatesCensusAnalyser;
+package com.Bridgelabz.Day29_IndianStatesCensusAnalyser;
 
 import com.opencsv.bean.CsvBindByName;
 
