@@ -23,4 +23,5 @@ public class CSVStateCensus {
 		return "IndiaStateCensus [ State = " + state + " , Population = " + pop + " , AreaInSqKm = " + area
 				+ " , density = " + density + " ]";
 	}
-}
+	}
+
